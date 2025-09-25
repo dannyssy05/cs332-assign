@@ -2,22 +2,22 @@
 .vscode
 
 recfun/*
-!recfun/src
+!recfun/src/**
 
 funsets/*
-!funsets/src
+!funsets/src/**
 
 objsets/*
-!objsets/src
+!objsets/src/**
 
 patmat/*
-!patmat/src
+!patmat/src/**
 
 forcomp/*
-!forcomp/src
+!forcomp/src/**
 
 streams/*
-!streams/src
+!streams/src/**
 
 idea/
 .vscode/
@@ -29,4 +29,6 @@ idea/
 
 *.pdf
 *.zip
+
+
 
