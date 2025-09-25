@@ -25,6 +25,7 @@ idea/
 *.iml
 .classpath
 .project
+target/**
 .settings/
 
 *.pdf
