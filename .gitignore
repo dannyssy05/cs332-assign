@@ -1,0 +1,18 @@
+# sbt build output
+target/
+project/target/
+project/project/
+lib_managed/
+
+# IDE settings
+.idea/
+.vscode/
+.metals/
+*.iml
+.classpath
+.project
+.settings/
+
+# Archives
+*.zip
+
