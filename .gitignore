@@ -1,12 +1,32 @@
-# 모든 파일/폴더 무시
-/*
+.metals
+.vscode
 
-# .gitignore 자체는 추적
-!.gitignore
+recfun/*
+!recfun/src
 
-# 하위 디렉터리로 내려갈 수 있도록 폴더는 열어두기
-!*/
+funsets/*
+!funsets/src
 
-# 모든 경로에서 src 디렉터리와 그 안의 파일만 허용
-!**/src/**
+objsets/*
+!objsets/src
+
+patmat/*
+!patmat/src
+
+forcomp/*
+!forcomp/src
+
+streams/*
+!streams/src
+
+idea/
+.vscode/
+.metals/
+*.iml
+.classpath
+.project
+.settings/
+
+*.pdf
+*.zip
 
