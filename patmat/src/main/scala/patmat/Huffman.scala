@@ -153,7 +153,10 @@ object Huffman {
    *    the example invocation. Also define the return type of the `until` function.
    *  - try to find sensible parameter names for `xxx`, `yyy` and `zzz`.
    */
-  def until(xxx: ???, yyy: ???)(zzz: ???): ??? = ???
+  def until(single: List[CodeTree]=>Boolean, com: List[CodeTree]=>List[CodeTree])(trees: List[CodeTree]): List[CodeTree] = {
+    if (single(trees)) trees
+    else until(single,com)(com(trees))
+  }
 
   /**
    * This function creates a code tree which is optimal to encode the text `chars`.
@@ -161,7 +164,11 @@ object Huffman {
    * The parameter `chars` is an arbitrary text. This function extracts the character
    * frequencies from that text and creates a code tree based on them.
    */
-  def createCodeTree(chars: List[Char]): CodeTree = ???
+  def createCodeTree(chars: List[Char]): CodeTree = {
+    makeOrderedLeafList(times(chars)) match {
+      case leafs=>until (singleton, combine ) (leafs).head
+    }
+  }
 
 
 
@@ -173,7 +180,24 @@ object Huffman {
    * This function decodes the bit sequence `bits` using the code tree `tree` and returns
    * the resulting list of characters.
    */
-  def decode(tree: CodeTree, bits: List[Bit]): List[Char] = ???
+  def decode(tree: CodeTree, bits: List[Bit]): List[Char] = {
+    def search(t: CodeTree, b :List[Bit]):(Char,List[Bit])=t match {
+      case Leaf(c,_)=>(c,b)
+      case Fork(left,right,_,_)=>
+        b match {
+        case 0::tail=>search(left,tail)
+        case 1::tail=>search(right,tail)
+
+      }
+    }
+    bits match {
+      case Nil=>Nil
+      case _=>
+        val (ch, tail)=search(tree,bits)
+        ch::decode(tree,tail)
+    }
+
+  }
 
   /**
    * A Huffman coding tree for the French language.
@@ -191,7 +215,7 @@ object Huffman {
   /**
    * Write a function that returns the decoded secret
    */
-  def decodedSecret: List[Char] = ???
+  def decodedSecret: List[Char] = decode(frenchCode, secret)
 
 
 
@@ -201,7 +225,19 @@ object Huffman {
    * This function encodes `text` using the code tree `tree`
    * into a sequence of bits.
    */
-  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
+  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
+    def finding(t:CodeTree, target:Char):List[Bit]= t match {
+      case Leaf(c,_) if c==target=>Nil
+      case  Fork(l,r,_,_)=>
+          if (chars(l).contains(target)) 0::finding(l,target)
+          else  1::finding(r,target)
+  }
+
+    text match {
+      case Nil=> Nil
+      case head::tail => finding(tree,head):::encode(tree)(tail)
+    }
+  }
 
 
   // Part 4b: Encoding using code table
@@ -212,7 +248,9 @@ object Huffman {
    * This function returns the bit sequence that represents the character `char` in
    * the code table `table`.
    */
-  def codeBits(table: CodeTable)(char: Char): List[Bit] = ???
+  def codeBits(table: CodeTable)(char: Char): List[Bit] = table match {
+    case (c,bit)::tail=> if(c==char) bit else codeBits(tail)(char)
+  }
 
   /**
    * Given a code tree, create a code table which contains, for every character in the
